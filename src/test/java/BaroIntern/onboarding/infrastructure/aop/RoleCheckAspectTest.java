@@ -53,4 +53,22 @@ public class RoleCheckAspectTest {
         assertThatCode(() -> roleCheckAspect.checkRole(mockAnnotation)).doesNotThrowAnyException();
     }
 
+    @Test
+    @DisplayName("JWT에서 추출한 역할이 허용된 역할과 다를 경우 SecurityException 발생")
+    void checkRole_Fail_InvalidRole() {
+        // Given
+        String token = "Bearer validToken";
+        String userRole = "ROLE_USER"; // ROLE_ADMIN이 필요하지만, JWT는 ROLE_USER임
+        RequireRole mockAnnotation = Mockito.mock(RequireRole.class);
+
+        when(request.getHeader("Authorization")).thenReturn(token);
+        when(jwtUtil.getUserAuthoritiesFromToken("validToken")).thenReturn(userRole);
+        when(mockAnnotation.value()).thenReturn("ROLE_ADMIN");
+
+        // When & Then
+        assertThatThrownBy(() -> roleCheckAspect.checkRole(mockAnnotation))
+                .isInstanceOf(SecurityException.class)
+                .hasMessageContaining("권한이 없습니다.");
+    }
+
 }
