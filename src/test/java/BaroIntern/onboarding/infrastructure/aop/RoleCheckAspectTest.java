@@ -1,0 +1,56 @@
+package BaroIntern.onboarding.infrastructure.aop;
+
+import BaroIntern.onboarding.application.security.JwtUtil;
+import jakarta.servlet.http.HttpServletRequest;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.when;
+
+@ActiveProfiles("test")
+@SpringBootTest
+public class RoleCheckAspectTest {
+
+    @Mock
+    private HttpServletRequest request;
+
+    @Mock
+    private JwtUtil jwtUtil;
+
+    @InjectMocks
+    private RoleCheckAspect roleCheckAspect;
+
+    @Mock
+    private RequireRole requireRole;
+
+    @BeforeEach
+    void setUp(){
+        roleCheckAspect = new RoleCheckAspect(request, jwtUtil);
+    }
+
+    @Test
+    @DisplayName("옳바른 JWT와 옳바른 역할이 match 될 경우 RoleCheck 성공")
+    void checkRole_Success() {
+        // Given
+        String token = "Bearer validToken";
+        String userRole = "ROLE_ADMIN";
+        RequireRole mockAnnotation = Mockito.mock(RequireRole.class);
+
+        when(request.getHeader("Authorization")).thenReturn(token);
+        when(jwtUtil.getUserAuthoritiesFromToken("validToken")).thenReturn(userRole);
+        when(mockAnnotation.value()).thenReturn("ROLE_ADMIN");
+
+        // When & Then
+        assertThatCode(() -> roleCheckAspect.checkRole(mockAnnotation)).doesNotThrowAnyException();
+    }
+
+}
