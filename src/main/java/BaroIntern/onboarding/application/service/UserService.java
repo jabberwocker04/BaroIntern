@@ -28,6 +28,8 @@ public class UserService {
     @Transactional
     public SignUpResDto signUp(SignUpReqDto singUpDto) {
 
+
+
         User user = User.create(
                 singUpDto.username(),
                 passwordEncoder.encode(singUpDto.password()),
