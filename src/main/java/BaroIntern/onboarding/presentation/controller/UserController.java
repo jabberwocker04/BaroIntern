@@ -4,7 +4,6 @@ import BaroIntern.onboarding.application.dto.LoginResDto;
 import BaroIntern.onboarding.application.dto.SignUpResDto;
 import BaroIntern.onboarding.application.service.UserService;
 import BaroIntern.onboarding.infrastructure.aop.RequireRole;
-import BaroIntern.onboarding.infrastructure.aop.RoleCheckAspect;
 import BaroIntern.onboarding.presentation.dto.LoginReqDto;
 import BaroIntern.onboarding.presentation.dto.SignUpReqDto;
 import jakarta.validation.Valid;

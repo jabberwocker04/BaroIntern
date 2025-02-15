@@ -1,6 +1,5 @@
 package BaroIntern.onboarding.application.security;
 
-import BaroIntern.onboarding.domain.entity.Authorities;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.util.Date;
-import java.util.List;
 
 @Component
 @Slf4j
