@@ -10,10 +10,8 @@ import BaroIntern.onboarding.domain.repository.UserRepository;
 import BaroIntern.onboarding.presentation.dto.LoginReqDto;
 import BaroIntern.onboarding.presentation.dto.SignUpReqDto;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,7 +55,7 @@ public class UserService {
                 .filter(userInfo -> passwordEncoder.matches(password, userInfo.getPassword()))
                 .orElseThrow(() -> new UsernameNotFoundException("Not Found " + username));
 
-        String token = jwtUtil.generateToken(username,user.getRole());
+        String token = jwtUtil.generateToken(username, user.getRole().toString());
 
         return new LoginResDto(token);
 

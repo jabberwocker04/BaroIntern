@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.List;
 
 @Component
 @Slf4j
@@ -34,10 +35,10 @@ public class JwtUtil {
     }
 
     // 토큰 생성
-    public String generateToken(String username, Authorities authorities) {
+    public String generateToken(String username, String authorities) {
         return Jwts.builder()
                 .claim("username", username)
-                .claim("authorities", authorities.name())
+                .claim("authorities", authorities)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(key, ALGORITHM)
@@ -65,10 +66,15 @@ public class JwtUtil {
     // 토큰에서 사용자 정보 추출
     public Claims getUserInfoFromToken(String token) {
         return Jwts.parser()
-                .verifyWith(key)
+                .setSigningKey(key)
                 .build()
-                .parseSignedClaims(token)
+                .parseClaimsJws(token)
                 .getPayload();
+    }
+
+    // 토큰에서 authorities 추출
+    public String getUserAuthoritiesFromToken(String token){
+        return getUserInfoFromToken(token).get("authorities").toString();
     }
 
 }

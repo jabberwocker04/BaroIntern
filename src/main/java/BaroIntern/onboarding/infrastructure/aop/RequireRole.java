@@ -1,4 +1,4 @@
-package BaroIntern.onboarding.infrastructure.config.aop;
+package BaroIntern.onboarding.infrastructure.aop;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
