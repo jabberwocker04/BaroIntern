@@ -64,7 +64,7 @@ public class UserServiceTest {
     }
 
     @Test
-    @DisplayName("회원가입 실패")
+    @DisplayName("회원가입 실패 -> 중복 유저")
     void signUp_Fail() {
         User validateUser = User.create(
                 "testUser",
@@ -76,16 +76,12 @@ public class UserServiceTest {
         // Given
         SignUpReqDto signUpReqDto = new SignUpReqDto("testUser", "12341234", "john");
 
-        when(userRepository.save(any(User.class))).thenReturn(user);
-        when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
         when(userRepository.findByUsername(signUpReqDto.username())).thenReturn(Optional.of(validateUser));
         // When
-        SignUpResDto result = userService.signUp(signUpReqDto);
+        assertThatThrownBy(() -> userService.signUp(signUpReqDto))
+                .isInstanceOf(IllegalAccessException.class)
+                        .hasMessage("이미 존재하는 사용자입니다.");
 
-        // Then
-        assertThat(result.username()).isEqualTo("testUser");
-        assertThat(result.nickname()).isEqualTo("john");
-        assertThat(result.authorities().get(0).authorityName()).isEqualTo("ROLE_USER");
     }
 
 
