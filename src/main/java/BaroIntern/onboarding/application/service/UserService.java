@@ -28,7 +28,9 @@ public class UserService {
     @Transactional
     public SignUpResDto signUp(SignUpReqDto singUpDto) {
 
-
+        if(userRepository.findByUsername(singUpDto.username()).isPresent()){
+            throw new IllegalArgumentException("이미 존재하는 사용자입니다.");
+        }
 
         User user = User.create(
                 singUpDto.username(),

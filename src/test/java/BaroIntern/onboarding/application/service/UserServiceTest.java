@@ -66,20 +66,22 @@ public class UserServiceTest {
     @Test
     @DisplayName("회원가입 실패 -> 중복 유저")
     void signUp_Fail() {
-        User validateUser = User.create(
+
+        // Given
+        User existingUser = User.create(
                 "testUser",
                 "12341234",
                 "john",
                 Authorities.USER
         );
 
-        // Given
         SignUpReqDto signUpReqDto = new SignUpReqDto("testUser", "12341234", "john");
 
-        when(userRepository.findByUsername(signUpReqDto.username())).thenReturn(Optional.of(validateUser));
+        when(userRepository.findByUsername(signUpReqDto.username())).thenReturn(Optional.of(existingUser));
+
         // When
         assertThatThrownBy(() -> userService.signUp(signUpReqDto))
-                .isInstanceOf(IllegalAccessException.class)
+                .isInstanceOf(IllegalArgumentException.class)
                         .hasMessage("이미 존재하는 사용자입니다.");
 
     }
