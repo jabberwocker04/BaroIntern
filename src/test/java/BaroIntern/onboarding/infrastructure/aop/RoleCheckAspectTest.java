@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -28,9 +27,6 @@ public class RoleCheckAspectTest {
 
     @InjectMocks
     private RoleCheckAspect roleCheckAspect;
-
-    @Mock
-    private RequireRole requireRole;
 
     @BeforeEach
     void setUp(){
