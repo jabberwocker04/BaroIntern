@@ -1,7 +1,9 @@
 package BaroIntern.onboarding.presentation.controller;
 
+import BaroIntern.onboarding.application.dto.LoginResDto;
 import BaroIntern.onboarding.application.dto.SignUpResDto;
 import BaroIntern.onboarding.application.service.UserService;
+import BaroIntern.onboarding.presentation.dto.LoginReqDto;
 import BaroIntern.onboarding.presentation.dto.SignUpReqDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,13 @@ public class UserController {
             @RequestBody @Valid SignUpReqDto request) {
 
         return ResponseEntity.ok(userService.signUp(request));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResDto> login(
+            @RequestBody @Valid LoginReqDto request) {
+
+        return ResponseEntity.ok(userService.login(request));
     }
 
 }
