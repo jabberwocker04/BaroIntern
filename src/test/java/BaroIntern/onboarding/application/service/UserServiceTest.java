@@ -1,15 +1,19 @@
 package BaroIntern.onboarding.application.service;
 
+import BaroIntern.onboarding.application.dto.LoginResDto;
 import BaroIntern.onboarding.application.dto.SignUpResDto;
 import BaroIntern.onboarding.application.security.JwtUtil;
 import BaroIntern.onboarding.domain.entity.Authorities;
 import BaroIntern.onboarding.domain.entity.User;
 import BaroIntern.onboarding.domain.repository.UserRepository;
+import BaroIntern.onboarding.presentation.dto.LoginReqDto;
 import BaroIntern.onboarding.presentation.dto.SignUpReqDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
@@ -18,6 +22,8 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @ActiveProfiles("test")
@@ -86,5 +92,30 @@ public class UserServiceTest {
 
     }
 
+    @Test
+    @DisplayName("로그인 성공 Jwt 토큰 발급")
+    void login_Success() {
+        //given
+        LoginReqDto loginReqDto = new LoginReqDto("testUser", "12341234");
+
+        User user = User.create(
+                "testUser",
+                "12341234",
+                "john",
+                Authorities.USER
+        );
+
+        //when
+        when(userRepository.findByUsername(loginReqDto.username())).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches(loginReqDto.password(), user.getPassword())).thenReturn(true); // 패스워드 검증 추가
+        when(jwtUtil.generateToken(user.getUsername(), user.getRole().name())).thenReturn("Token");
+
+        LoginResDto resDto = userService.login(loginReqDto);
+
+        //then
+        assertNotNull(resDto);
+        assertEquals("Token", resDto.token());
+
+    }
 
 }
