@@ -15,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -115,6 +116,22 @@ public class UserServiceTest {
         //then
         assertNotNull(resDto);
         assertEquals("Token", resDto.token());
+
+    }
+
+    @Test
+    @DisplayName("로그인 실패 시 예외 발생")
+    void login_Fail() {
+        //given
+        LoginReqDto loginReqDto = new LoginReqDto("testUser", "12341234");
+
+        //when
+        when(userRepository.findByUsername(loginReqDto.username())).thenReturn(Optional.empty());
+
+        //then
+        assertThatThrownBy(() -> userService.login(loginReqDto))
+                .isInstanceOf(UsernameNotFoundException.class)
+                .hasMessage((loginReqDto.username()+"은 존재하지 않습니다."));
 
     }
 

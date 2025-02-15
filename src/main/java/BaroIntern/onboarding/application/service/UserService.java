@@ -51,7 +51,7 @@ public class UserService {
 
         User user = userRepository.findByUsername(loginReqDto.username())
                 .filter(userInfo -> passwordEncoder.matches(password, userInfo.getPassword()))
-                .orElseThrow(() -> new UsernameNotFoundException("Not Found " + username));
+                .orElseThrow(() -> new UsernameNotFoundException(username+"은 존재하지 않습니다."));
 
         String token = jwtUtil.generateToken(username, user.getRole().toString());
 
