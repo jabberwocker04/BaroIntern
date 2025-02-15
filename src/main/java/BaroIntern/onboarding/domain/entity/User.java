@@ -29,4 +29,28 @@ public class User {
     @Column(nullable = false)
     private Authorities role;
 
+    private User(
+            String username,
+            String password,
+            String nickname,
+            Authorities role
+    ) {
+        this.username = username;
+        this.password = password;
+        this.nickname = nickname;
+        this.role = role;
+    }
+
+    public static User create(
+            String username,
+            String password,
+            String nickname,
+            Authorities role) {
+        return new User(
+                username,
+                password,
+                nickname,
+                role
+        );
+    }
 }
