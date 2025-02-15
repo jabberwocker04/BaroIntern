@@ -38,6 +38,10 @@ dependencies {
 
 	// jwt 추가
 	implementation 'io.jsonwebtoken:jjwt:0.12.6' // JWT
+
+	// test jwt 추가
+	testImplementation 'io.jsonwebtoken:jjwt:0.12.6'
+	testImplementation 'org.mockito:mockito-core'
 }
 
 tasks.named('test') {
