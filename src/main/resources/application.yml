@@ -1,0 +1,33 @@
+spring:
+  application:
+    name : onboarding
+  datasource:
+    url: ${DB_URL}/onboarding_db
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      format-sql: false
+      use_sql_comments: false
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+service:
+  jwt:
+    access-expiration: 360000
+    secret-key: ${SECRET-KEY}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
