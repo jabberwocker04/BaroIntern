@@ -2,7 +2,7 @@ spring:
   application:
     name : onboarding
   datasource:
-    url: ${DB_URL}/onboarding_db
+    url: ${DB_URL}/onboarding
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
@@ -24,7 +24,7 @@ spring:
 service:
   jwt:
     access-expiration: 360000
-    secret-key: ${SECRET-KEY}
+    secret-key: ${SECRET_KEY}
 
 springdoc:
   api-docs:
